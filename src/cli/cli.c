@@ -9,8 +9,9 @@
 #include "freertos/event_groups.h"
 #include "driver/uart.h"
 #include "esp_system.h"
-#include "esp_vfs_dev.h"
 #include "driver/uart_vfs.h"
+#include "driver/usb_serial_jtag_vfs.h"
+#include "driver/usb_serial_jtag.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -383,9 +384,22 @@ static void cli_stats_handler(char *args) {
 }
 
 static void cli_task(void *pvParameters) {
-    // Configure line endings for VFS console using modern ESP-IDF API
+#if CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG
+    // Install driver and route stdio to it if not done
+    if (!usb_serial_jtag_is_driver_installed()) {
+        usb_serial_jtag_driver_config_t cfg = USB_SERIAL_JTAG_DRIVER_CONFIG_DEFAULT();
+        usb_serial_jtag_driver_install(&cfg);
+    }
+    usb_serial_jtag_vfs_use_driver();
+    
+    // Configure line endings for native USB Serial/JTAG console using modern ESP-IDF API
+    usb_serial_jtag_vfs_set_rx_line_endings(ESP_LINE_ENDINGS_CRLF);
+    usb_serial_jtag_vfs_set_tx_line_endings(ESP_LINE_ENDINGS_CRLF);
+#else
+    // Configure line endings for VFS UART console using modern ESP-IDF API
     uart_vfs_dev_port_set_rx_line_endings(SYS_UART_PORT, ESP_LINE_ENDINGS_CRLF);
     uart_vfs_dev_port_set_tx_line_endings(SYS_UART_PORT, ESP_LINE_ENDINGS_CRLF);
+#endif
     
     // Set non-blocking mode on stdin
     int flags = fcntl(fileno(stdin), F_GETFL, 0);
