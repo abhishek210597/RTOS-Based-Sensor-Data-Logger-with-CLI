@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # RTOS-Based Sensor Data Logger with CLI on ESP32-C6
 
 An industrial-grade, multi-tasking sensor data logger implemented in **pure C** on the **ESP32-C6** platform. Built using **FreeRTOS** and **ESP-IDF** within the **PlatformIO** ecosystem, this project demonstrates professional embedded software architecture, robust task synchronization, custom watchdog implementation, thread-safe memory storage, and an interactive command-line interface.
@@ -156,3 +157,7 @@ C:\Users\DELL\.platformio\penv\Scripts\pio.exe run --target upload
 # Run the serial monitor
 C:\Users\DELL\.platformio\penv\Scripts\pio.exe device monitor
 ```
+=======
+# RTOS-Based-Sensor-Data-Logger-with-CLI
+FreeRTOS, Multitasking &amp; Embedded Systems
+>>>>>>> 3e917f43c0eb11a4a6f4fbb7e349f7d496d660f8
